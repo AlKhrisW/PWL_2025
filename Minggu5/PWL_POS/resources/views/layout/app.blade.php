@@ -6,6 +6,8 @@
     @hasSection('subtitle') | @yield('subtitle') @endif
 @stop
 
+@vite('resource/js/app.js')
+
 {{-- Extend and customize the page content header --}}
 
 @section('content_header') 
@@ -30,6 +32,7 @@
 @stop
 
 {{-- Create a common footer --}} 
+
 @section('footer')
     <div class="float-right">
         Version: {{ config('app.version', '1.0.0') }}
@@ -45,21 +48,19 @@
 {{-- Add common Javascript/Jquery code --}} 
 
 @push('js')
-<script>
-        
-    $(document).ready(function() {
-        // Add your common script logic here...
-    });
-        
-</script> 
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
 @endpush
+
+@stack('scripts')
         
 {{-- Add common CSS customizations --}}
         
 @push('css')
+<link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
 <style type="text/css">
         
-    {{-- You can add AdminLTE customizations here --}}
+    /* {{-- You can add AdminLTE customizations here --}} */
     /*
     .card-header {
         border-bottom: none;
@@ -70,4 +71,3 @@
     */
 </style> 
 @endpush
-        
