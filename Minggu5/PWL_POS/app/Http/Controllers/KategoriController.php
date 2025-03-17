@@ -27,4 +27,20 @@ class KategoriController extends Controller
 
         return redirect('/kategori');
     }
+
+    public function edit($id)
+    {
+        $find = KategoriModel::findOrFail($id);
+        return view('kategori.edit', ['kategori' => $find]);
+    }
+
+    public function simpan(Request $request, $id)
+    {
+        $user = KategoriModel::find($id);
+        $user->kategori_kode = $request->kodeKategori;
+        $user->kategori_nama = $request->namaKategori;
+        $user->save();
+
+        return redirect('/kategori');
+    }
 }
