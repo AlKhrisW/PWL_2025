@@ -52,15 +52,18 @@
                         </div>
                         
                         <div class="row">
-                            <div class="col-8">
+                            <div class="col-9">
                                 <div class="icheck-primary">
                                     <input type="checkbox" id="remember">
                                     <label for="remember">Remember Me</label>
                                 </div>
                             </div>
-                            <div class="col-4">
-                                <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+                            <div class="col-3 my-1">
+                                <a href="{{ url('register') }}">Register?</a>
                             </div>
+                        </div>
+                        <div class="input-group mb-3">
+                            <button type="submit" class="btn btn-primary btn-block">Sign In</button>
                         </div>
                     </form>
                 </div>
