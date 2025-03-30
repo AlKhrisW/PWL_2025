@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\LevelModel;
 use App\Models\BarangModel;
 use App\Models\KategoriModel;
 use Illuminate\Http\Request;
@@ -14,18 +13,24 @@ class BarangController extends Controller
 {
     public function index()
     {
-        $activeMenu = 'barang';
         $breadcrumb = (object) [
             'title' => 'Data Barang',
             'list' => ['Home', 'Barang']
         ];
 
+        $page = (object) [
+            'title' => 'Daftar barang yang terdaftar dalam sistem'
+        ];
+
+        $activeMenu = 'barang';
+
         $kategori = KategoriModel::select('kategori_id', 'kategori_nama')->get();
 
         return view('barang.index', [
-            'activeMenu' => $activeMenu,
-            'breadcrumb' => $breadcrumb,
-            'kategori' => $kategori
+            'breadcrumb'    => $breadcrumb,
+            'page'          => $page,
+            'kategori'      => $kategori,
+            'activeMenu'    => $activeMenu
         ]);
     }
     public function list(Request $request)
@@ -88,8 +93,9 @@ class BarangController extends Controller
     public function edit_ajax($id)
     {
         $barang = BarangModel::find($id);
-        $level = LevelModel::select('level_id', 'level_nama')->get();
-        return view('barang.edit_ajax', ['barang' => $barang, 'level' => $level]);
+        $kategori = KategoriModel::select('kategori_id', 'kategori_nama')->get();
+        
+        return view('barang.edit_ajax', ['barang' => $barang, 'kategori' => $kategori]);
     }
     public function update_ajax(Request $request, $id)
     {

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\SupplierModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 use Yajra\DataTables\Facades\DataTables;
 
 class SupplierController extends Controller
@@ -39,108 +40,6 @@ class SupplierController extends Controller
             })
             ->rawColumns(['aksi']) // memberitahu bahwa kolom aksi adalah html
             ->make(true);
-    }
-    public function create()
-    {
-        $breadcrumb = (object) [
-            'title' => 'Tambah Supplier',
-            'list' => ['Home', 'Supplier', 'Tambah']
-        ];
-
-        $page = (object) [
-            'title' => 'Tambah supplier baru'
-        ];
-
-        $activeMenu = 'supplier'; // set menu yang sedang aktif
-
-        return view('supplier.create', ['breadcrumb' => $breadcrumb, 'page' => $page, 'activeMenu' => $activeMenu]);
-    }
-    public function store(Request $request)
-    {
-        $request->validate([
-            'supplier_kode' => 'required|string|min:3|unique:m_supplier,supplier_id',
-            'supplier_nama'     => 'required|string|max:100',
-            'supplier_alamat'   => 'required|string',
-        ]);
-
-        SupplierModel::create([
-            'supplier_kode' => $request->supplier_kode,
-            'supplier_nama'     => $request->supplier_nama,
-            'supplier_alamat'   => $request->supplier_alamat,
-        ]);
-
-        return redirect('/supplier')->with('success', 'Data supplier berhasil disimpan');
-    }
-    public function show(string $id)
-    {
-        $supplier = SupplierModel::find($id);
-
-        $breadcrumb = (object) [
-            'title' => 'Detail supplier',
-            'list'  => ['Home', 'supplier', 'Detail']
-        ];
-
-        $page = (object) [
-            'title' => 'Detail supplier'
-        ];
-
-        $activeMenu = 'supplier'; // set menu yang sedang aktif
-
-        return view('supplier.show', [
-            'breadcrumb' => $breadcrumb,
-            'page'       => $page,
-            'supplier'   => $supplier,
-            'activeMenu' => $activeMenu
-        ]);
-    }
-    public function edit(string $id)
-    {
-        $supplier = SupplierModel::find($id);
-
-        $breadcrumb = (object) [
-            'title' => 'Edit supplier',
-            'list'  => ['Home', 'supplier', 'Edit']
-        ];
-
-        $page = (object) [
-            'title' => 'Edit supplier'
-        ];
-
-        $activeMenu = 'supplier'; // set menu yang sedang aktif
-
-        return view('supplier.edit', ['breadcrumb' => $breadcrumb, 'page' => $page, 'supplier' => $supplier, 'activeMenu' => $activeMenu]);
-    }
-    public function update(Request $request, string $id)
-    {
-        $request->validate([
-            'supplier_kode' => 'required|string|min:3|unique:m_supplier,supplier_kode,' . $id . ',supplier_id',
-            'supplier_nama'     => 'required|string|max:100',
-            'supplier_alamat'   => 'required|string',
-        ]);
-
-        SupplierModel::find($id)->update([
-            'supplier_kode' => $request->supplier_kode,
-            'supplier_nama'     => $request->supplier_nama,
-            'supplier_alamat'   => $request->supplier_alamat,
-        ]);
-
-        return redirect('/supplier')->with('success', 'Data supplier berhasil diubah');
-    }
-    public function destroy(string $id)
-    {
-        $check = SupplierModel::find($id);
-        if (!$check) {
-            return redirect('/supplier')->with('error', 'Data supplier tidak ditemukan');
-        }
-
-        try {
-            SupplierModel::destroy($id); // Hapus data supplier
-
-            return redirect('/supplier')->with('success', 'Data supplier berhasil dihapus');
-        } catch (\Illuminate\Database\QueryException $e) {
-            // Jika terjadi error ketika menghapus data, redirect kembali ke halaman dengan membawa pesan error
-            return redirect('/supplier')->with('error', 'Data supplier gagal dihapus karena masih terdapat tabel lain yang terkait dengan data ini');
-        }
     }
     public function create_ajax()
     {
@@ -236,6 +135,63 @@ class SupplierController extends Controller
                 ]);
             }
         }
+        return redirect('/');
+    }
+    public function import()
+    {
+        return view('supplier.import');
+    }
+    public function import_ajax(Request $request)
+    {
+        if ($request->ajax() || $request->wantsJson()) {
+            $rules = [
+                'file_supplier' => ['required', 'mimes:xlsx', 'max:1024']
+            ];
+
+            $validator = Validator::make($request->all(), $rules);
+            if ($validator->fails()) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Validasi Gagal',
+                    'msgField' => $validator->errors()
+                ]);
+            }
+
+            $file = $request->file('file_supplier');
+            $reader = IOFactory::createReader('Xlsx');
+            $reader->setReadDataOnly(true);
+            $spreadsheet = $reader->load($file->getRealPath());
+            $sheet = $spreadsheet->getActiveSheet();
+            $data = $sheet->toArray(null, false, true, true);
+
+            $insert = [];
+            if (count($data) > 1) {
+                foreach ($data as $baris => $value) {
+                    if ($baris > 1) { // baris ke 1 adalah header
+                        $insert[] = [
+                            'supplier_kode' => $value['A'],
+                            'supplier_nama' => $value['B'],
+                            'supplier_alamat' => $value['C'],
+                            'created_at' => now(),
+                        ];
+                    }
+                }
+
+                if (count($insert) > 0) {
+                    SupplierModel::insertOrIgnore($insert);
+                    return response()->json([
+                        'status' => true,
+                        'message' => 'Data berhasil diimport'
+                    ]);
+                }
+            }
+
+            return response()->json([
+                'status' => false,
+                'message' => 'Tidak ada data yang diimport'
+            ]);
+        }
+
         return redirect('/');
     }
 }
