@@ -7,6 +7,7 @@
             <div class="card-tools">
                 <button onclick="modalAction('{{ url('/supplier/import') }}')" class="btn btn-info">Import Supplier</button>
                 <a href="{{ url('/supplier/export_excel') }}" class="btn btn-primary">Export Supplier</a>
+                <a href="{{ url('/supplier/export_pdf') }}" class="btn btn-warning"><i class="fa fa-file- pdf"></i> Export Supplier (PDF)</a>
                 <button onclick="modalAction('{{ url('/supplier/create_ajax') }}')" class="btn btn-success">Tambah Data (Ajax)</button>
             </div>
         </div>
@@ -25,6 +26,7 @@
                         <th>No</th>
                         <th>Kode Supplier</th>
                         <th>Nama Supplier</th>
+                        <th>Alamat Supplier</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
@@ -72,6 +74,13 @@
                         data: "supplier_nama",
                         className: "",
                         width: "37%",
+                        orderable: true,
+                        searchable: true
+                    },
+                    {
+                        data: "supplier_alamat",
+                        className: "",
+                        width: "30%",
                         orderable: true,
                         searchable: true
                     },
