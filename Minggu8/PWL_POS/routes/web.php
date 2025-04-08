@@ -122,5 +122,9 @@ Route::middleware('auth')->group(function () {
             Route::post('/list',[KategoriController::class, 'list']);
             Route::get('/{id}',[KategoriController::class, 'show']);
         });
+        Route::group(['prefix' => 'user'], function () {
+            Route::get('/profile', [UserController::class, 'profile_page']);
+            Route::post('/update_picture', [UserController::class, 'update_picture']);
+        });
     });
 });
