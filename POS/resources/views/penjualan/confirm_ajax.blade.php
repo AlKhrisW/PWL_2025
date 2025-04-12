@@ -55,7 +55,7 @@
                                     title: 'Berhasil',
                                     text: response.message
                                 });
-                                dataStok.ajax.reload();
+                                tablePenjualan.ajax.reload();
                             } else {
                                 Swal.fire({
                                     icon: 'error',

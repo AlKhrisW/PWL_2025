@@ -51,7 +51,7 @@
                         if (response.status) {
                             $('#myModal').modal('hide');
                             Swal.fire({ icon: 'success', title: 'Berhasil', text: response.message });
-                            dataDetail.ajax.reload();
+                            tableDetail.ajax.reload();
                         } else {
                             Swal.fire({ icon: 'error', title: 'Gagal', text: response.message });
                         }

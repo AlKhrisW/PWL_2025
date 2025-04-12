@@ -75,7 +75,7 @@
                         if(response.status){
                             $('#myModal').modal('hide');
                             Swal.fire({ icon: 'success', title: 'Berhasil', text: response.message });
-                            dataPenjualan.ajax.reload();
+                            tablePenjualan.ajax.reload();
                         }else{
                             $('.error-text').text('');
                             $.each(response.msgField, function(prefix, val) {

@@ -9,6 +9,7 @@ use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\BarangController;
 use App\Http\Controllers\PenjualanController;
 use App\Http\Controllers\PenjualanDetailController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StokController;
 use App\Http\Controllers\WelcomeController;
 
@@ -43,6 +44,10 @@ Route::middleware('auth')->group(function () {
             Route::put('/{id}/update_ajax',[BarangController::class, 'update_ajax']);
             Route::get('/{id}/delete_ajax',[BarangController::class, 'confirm_ajax']);
             Route::delete('/{id}/delete_ajax',[BarangController::class, 'delete_ajax']);
+            Route::get('/import', [BarangController::class, 'import']); // ajax form upload excel
+            Route::post('/import_ajax', [BarangController::class, 'import_ajax']); // ajax import excel
+            Route::get('/export_excel', [BarangController::class, 'export_excel']); // export excel
+            Route::get('/export_pdf', [BarangController::class, 'export_pdf']); // export pdf
         });
         
         Route::group(['prefix' => 'user'], function () {
@@ -55,6 +60,10 @@ Route::middleware('auth')->group(function () {
             Route::put('/{id}/update_ajax',[UserController::class, 'update_ajax']);
             Route::get('/{id}/delete_ajax',[UserController::class, 'confirm_ajax']);
             Route::delete('/{id}/delete_ajax',[UserController::class, 'delete_ajax']);
+            Route::get('/import', [UserController::class, 'import']); // ajax form upload excel
+            Route::post('/import_ajax', [UserController::class, 'import_ajax']); // ajax import excel
+            Route::get('/export_excel', [UserController::class, 'export_excel']); // export excel
+            Route::get('/export_pdf', [UserController::class, 'export_pdf']); // export pdf
         });
     
         Route::group(['prefix' => 'level'], function () {
@@ -67,6 +76,10 @@ Route::middleware('auth')->group(function () {
             Route::put('/{id}/update_ajax',[LevelController::class, 'update_ajax']);
             Route::get('/{id}/delete_ajax',[LevelController::class, 'confirm_ajax']);
             Route::delete('/{id}/delete_ajax',[LevelController::class, 'delete_ajax']);
+            Route::get('/import', [LevelController::class, 'import']); // ajax form upload excel
+            Route::post('/import_ajax', [LevelController::class, 'import_ajax']); // ajax import excel
+            Route::get('/export_excel', [LevelController::class, 'export_excel']); // export excel
+            Route::get('/export_pdf', [LevelController::class, 'export_pdf']); // export pdf
         });
 
         Route::group(['prefix' => 'supplier'], function () {
@@ -76,6 +89,10 @@ Route::middleware('auth')->group(function () {
             Route::put('/{id}/update_ajax',[SupplierController::class, 'update_ajax']);
             Route::get('/{id}/delete_ajax',[SupplierController::class, 'confirm_ajax']);
             Route::delete('/{id}/delete_ajax',[SupplierController::class, 'delete_ajax']);
+            Route::get('/import', [SupplierController::class, 'import']); // ajax form upload excel
+            Route::post('/import_ajax', [SupplierController::class, 'import_ajax']); // ajax import excel
+            Route::get('/export_excel', [SupplierController::class, 'export_excel']); // export excel
+            Route::get('/export_pdf', [SupplierController::class, 'export_pdf']); // export pdf
         });
         
         Route::group(['prefix' => 'kategori'], function () {
@@ -85,6 +102,10 @@ Route::middleware('auth')->group(function () {
             Route::put('/{id}/update_ajax',[KategoriController::class, 'update_ajax']);
             Route::get('/{id}/delete_ajax',[KategoriController::class, 'confirm_ajax']);
             Route::delete('/{id}/delete_ajax',[KategoriController::class, 'delete_ajax']);
+            Route::get('/import', [KategoriController::class, 'import']); // ajax form upload excel
+            Route::post('/import_ajax', [KategoriController::class, 'import_ajax']); // ajax import excel
+            Route::get('/export_excel', [KategoriController::class, 'export_excel']); // export excel
+            Route::get('/export_pdf', [KategoriController::class, 'export_pdf']); // export pdf
         });
 
         Route::group(['prefix' => 'stok'], function () {
@@ -94,6 +115,24 @@ Route::middleware('auth')->group(function () {
             Route::put('/{id}/update_ajax',[StokController::class, 'update_ajax']);
             Route::get('/{id}/delete_ajax',[StokController::class, 'confirm_ajax']);
             Route::delete('/{id}/delete_ajax',[StokController::class, 'delete_ajax']);
+            Route::get('/import', [StokController::class, 'import']); // ajax form upload excel
+            Route::post('/import_ajax', [StokController::class, 'import_ajax']); // ajax import excel
+            Route::get('/export_excel', [StokController::class, 'export_excel']); // export excel
+            Route::get('/export_pdf', [StokController::class, 'export_pdf']); // export pdf
+        });
+
+        Route::group(['prefix' => 'penjualan'], function () {
+            Route::get('/import', [PenjualanController::class, 'import']); // ajax form upload excel
+            Route::post('/import_ajax', [PenjualanController::class, 'import_ajax']); // ajax import excel
+            Route::get('/export_excel', [PenjualanController::class, 'export_excel']); // export excel
+            Route::get('/export_pdf', [PenjualanController::class, 'export_pdf']); // export pdf
+        });
+    
+        Route::group(['prefix' => 'detailPenjualan'], function () {
+            Route::get('/import', [PenjualanDetailController::class, 'import']); // ajax form upload excel
+            Route::post('/import_ajax', [PenjualanDetailController::class, 'import_ajax']); // ajax import excel
+            Route::get('/export_excel', [PenjualanDetailController::class, 'export_excel']); // export excel
+            Route::get('/export_pdf', [PenjualanDetailController::class, 'export_pdf']); // export pdf
         });
     });
     
@@ -156,6 +195,11 @@ Route::middleware('auth')->group(function () {
             Route::get('/',[StokController::class, 'index']);
             Route::post('/list',[StokController::class, 'list']);
             Route::get('/{id}/show_ajax',[StokController::class, 'show_ajax']);
+        });
+
+        Route::group(['prefix' => 'user'], function () {
+            Route::get('/profile', [UserController::class, 'profile_page']);
+            Route::post('/update_picture', [UserController::class, 'update_picture']);
         });
     });
 });

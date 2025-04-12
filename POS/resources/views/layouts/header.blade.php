@@ -131,13 +131,28 @@
           <i class="fas fa-th-large"></i>
         </a>
       </li>
-      <li class="nav-item">
-        <a href="#" class="nav-link text-danger" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-            <i class="fas fa-sign-out-alt">Logout</i>
+      <!-- User Dropdown -->
+      <li class="nav-item dropdown">
+        <a class="nav-link d-flex align-items-center" data-toggle="dropdown" href="#">
+            <img src="{{ Auth::user()->profile_picture ? asset('storage/'.Auth::user()->profile_picture) : asset('storage/profiles/profile_default.png') }}" 
+                class="img-circle elevation-2 mr-2" 
+                alt="User Image" 
+                style="width: 30px; height: 30px; object-fit: cover;">
+            <span>{{ Auth::user()->nama }}</span>
+            <i class="fas fa-caret-down ml-1"></i>
         </a>
-        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-            @csrf
-        </form>
+        <div class="dropdown-menu dropdown-menu-right">
+            <a href="{{ url('/user/profile') }}" class="dropdown-item">
+                <i class="fas fa-user mr-2"></i> Profile
+            </a>
+            <div class="dropdown-divider"></div>
+            <a href="#" class="dropdown-item text-danger" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                <i class="fas fa-sign-out-alt mr-2"></i> Logout
+            </a>
+            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                @csrf
+            </form>
+        </div>
       </li>
     </ul>
   </nav>

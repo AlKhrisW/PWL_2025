@@ -78,7 +78,7 @@
                                     title: 'Berhasil',
                                     text: response.message
                                 });
-                                dataStok.ajax.reload();
+                                tableStok.ajax.reload();
                             } else {
                                 Swal.fire({
                                     icon: 'error',
