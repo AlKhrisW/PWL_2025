@@ -219,12 +219,11 @@ class SupplierController extends Controller
         $no = 1;
         $baris = 2;
         foreach ($supplier as $value) {
-            $sheet->setCellValue('A' . $baris, $no);
+            $sheet->setCellValue('A' . $baris, $no++);
             $sheet->setCellValue('B' . $baris, $value->supplier_kode);
             $sheet->setCellValue('C' . $baris, $value->supplier_nama);
             $sheet->setCellValue('D' . $baris, $value->supplier_alamat);
             $baris++;
-            $no++;
         }
 
         foreach (range('A', 'D') as $columnID) {
@@ -234,7 +233,7 @@ class SupplierController extends Controller
         $sheet->setTitle('Data Supplier');
         
         $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
-        $filename = 'Data Supplier' . date('Y-m-d_H-i-s') . '.xlsx';
+        $filename = 'Data Supplier ' . date('Y-m-d_H-i-s') . '.xlsx';
 
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         header('Content-Disposition: attachment;filename="' . $filename . '"');

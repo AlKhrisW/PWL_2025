@@ -244,12 +244,11 @@ class UserController extends Controller
         $no = 1;
         $baris = 2;
         foreach ($user as $value) {
-            $sheet->setCellValue('A' . $baris, $no);
+            $sheet->setCellValue('A' . $baris, $no++);
             $sheet->setCellValue('B' . $baris, $value->username);
             $sheet->setCellValue('C' . $baris, $value->nama);
             $sheet->setCellValue('D' . $baris, $value->level->level_nama);
             $baris++;
-            $no++;
         }
 
         foreach (range('A', 'D') as $columnID) {
@@ -259,7 +258,7 @@ class UserController extends Controller
         $sheet->setTitle('Data User');
         
         $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
-        $filename = 'Data User' . date('Y-m-d_H-i-s') . '.xlsx';
+        $filename = 'Data User ' . date('Y-m-d_H-i-s') . '.xlsx';
 
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         header('Content-Disposition: attachment;filename="' . $filename . '"');

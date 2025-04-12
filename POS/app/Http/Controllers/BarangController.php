@@ -246,14 +246,13 @@ class BarangController extends Controller
         $no = 1;
         $baris = 2;
         foreach ($barang as $value) {
-            $sheet->setCellValue('A' . $baris, $no);
+            $sheet->setCellValue('A' . $baris, $no++);
             $sheet->setCellValue('B' . $baris, $value->barang_kode);
             $sheet->setCellValue('C' . $baris, $value->barang_nama);
             $sheet->setCellValue('D' . $baris, $value->harga_beli);
             $sheet->setCellValue('E' . $baris, $value->harga_jual);
             $sheet->setCellValue('F' . $baris, $value->kategori->kategori_nama);
             $baris++;
-            $no++;
         }
 
         foreach (range('A', 'F') as $columnID) {

@@ -261,7 +261,7 @@ class StokController extends Controller
         $no = 1;
         $baris = 2;
         foreach ($stok as $value) {
-            $sheet->setCellValue('A' . $baris, $no);
+            $sheet->setCellValue('A' . $baris, $no++);
             $sheet->setCellValue('B' . $baris, $value->supplier->supplier_nama);
             $sheet->setCellValue('C' . $baris, $value->barang->barang_nama);
             $sheet->setCellValue('D' . $baris, $value->user->nama);

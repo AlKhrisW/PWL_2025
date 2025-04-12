@@ -234,7 +234,7 @@ class PenjualanController extends Controller
         $no = 1;
         $baris = 2;
         foreach ($penjualan as $item) {
-            $sheet->setCellValue('A' . $baris, $no);
+            $sheet->setCellValue('A' . $baris, $no++);
             $sheet->setCellValue('B' . $baris, $item->user->nama);
             $sheet->setCellValue('C' . $baris, $item->penjualan_kode);
             $sheet->setCellValue('D' . $baris, $item->pembeli);

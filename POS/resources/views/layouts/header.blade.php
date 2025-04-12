@@ -134,11 +134,11 @@
       <!-- User Dropdown -->
       <li class="nav-item dropdown">
         <a class="nav-link d-flex align-items-center" data-toggle="dropdown" href="#">
-            <img src="{{ Auth::user()->profile_picture ? asset('storage/'.Auth::user()->profile_picture) : asset('storage/profiles/profile_default.png') }}" 
+            <img src="{{ auth()->user()->profile_picture ? asset('storage/'.auth()->user()->profile_picture) : asset('storage/profiles/profile_default.png') }}" 
                 class="img-circle elevation-2 mr-2" 
                 alt="User Image" 
                 style="width: 30px; height: 30px; object-fit: cover;">
-            <span>{{ Auth::user()->nama }}</span>
+            <span>{{ auth()->user()->nama }}</span>
             <i class="fas fa-caret-down ml-1"></i>
         </a>
         <div class="dropdown-menu dropdown-menu-right">
@@ -149,7 +149,7 @@
             <a href="#" class="dropdown-item text-danger" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                 <i class="fas fa-sign-out-alt mr-2"></i> Logout
             </a>
-            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+            <form id="logout-form" action="{{ url('/logout') }}" method="POST" class="d-none">
                 @csrf
             </form>
         </div>

@@ -216,11 +216,10 @@ class LevelController extends Controller
         $no = 1;
         $baris = 2;
         foreach ($level as $value) {
-            $sheet->setCellValue('A' . $baris, $no);
+            $sheet->setCellValue('A' . $baris, $no++);
             $sheet->setCellValue('B' . $baris, $value->level_kode);
             $sheet->setCellValue('C' . $baris, $value->level_nama);
             $baris++;
-            $no++;
         }
 
         foreach (range('A', 'C') as $columnID) {
@@ -230,7 +229,7 @@ class LevelController extends Controller
         $sheet->setTitle('Data Level');
         
         $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
-        $filename = 'Data Level' . date('Y-m-d_H-i-s') . '.xlsx';
+        $filename = 'Data Level ' . date('Y-m-d_H-i-s') . '.xlsx';
 
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         header('Content-Disposition: attachment;filename="' . $filename . '"');

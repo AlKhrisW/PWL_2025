@@ -61,7 +61,7 @@
     <table class="border-bottom-header">
         <tr>
             <td width="15%" class="text-center">
-                <img src="{{ asset('Polinema-logo.png') }}" alt="Logo Polinema" style="width: 120px; height: auto;">
+                <img src="{{ asset('storage/logo_polinema.png') }}" alt="Logo Polinema" style="width: 100px; height: auto;">
             </td>
             <td width="85%">
                 <span class="text-center d-block font-11 font-bold mb-1">
