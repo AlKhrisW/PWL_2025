@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class PenjualanDetailModel extends Model
 {
@@ -17,12 +18,12 @@ class PenjualanDetailModel extends Model
      */
     protected $fillable = ['barang_id', 'penjualan_id', 'harga', 'jumlah'];
 
-    public function barang()
+    public function barang(): BelongsTo
     {
         return $this->belongsTo(BarangModel::class, 'barang_id', 'barang_id');
     }
 
-    public function penjualan()
+    public function penjualan(): BelongsTo
     {
         return $this->belongsTo(PenjualanModel::class, 'penjualan_id', 'penjualan_id');
     }

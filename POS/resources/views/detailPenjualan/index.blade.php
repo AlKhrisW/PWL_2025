@@ -5,9 +5,6 @@
         <div class="card-header">
             <h3 class="card-title">{{ $page->title }}</h3>
             <div class="card-tools">
-                <button onclick="modalAction('{{ url('/detailPenjualan/import') }}')" class="btn btn-info btn-sm">Import Data</button>
-                <a href="{{ url('/detailPenjualan/export_excel') }}" class="btn btn-primary btn-sm"><i class="fa fa-file-excel"></i> Export Excel</a>
-                <a href="{{ url('/detailPenjualan/export_pdf') }}" class="btn btn-warning btn-sm"><i class="fa fa-file-pdf"></i> Export PDF</a>
                 <button onclick="modalAction('{{ url('/detailPenjualan/create_ajax') }}')" class="btn btn-success btn-sm">Tambah Data</button>
             </div>
         </div>
@@ -19,13 +16,13 @@
                         <div class="form-group form-group-sm row text-sm mb-0">
                             <label for="filter-date" class="col-md-1 col-form-label">Filter</label>
                             <div class="col-md-3">
-                                <select name="filter_barang" class="form-control form-control-sm filter_barang">
+                                <select name="filter_penjualan" class="form-control form-control-sm filter_penjualan">
                                     <option value="">- Semua -</option>
-                                    @foreach($barang as $item)
-                                        <option value="{{ $item->barang_id }}">{{ $item->barang_nama }}</option>
+                                    @foreach($penjualan as $item)
+                                        <option value="{{ $item->penjualan_id }}">{{ $item->penjualan_kode }}</option>
                                     @endforeach
                                 </select>
-                                <small class="form-text text-muted">Nama Barang</small>
+                                <small class="form-text text-muted">Kode Penjualan</small>
                             </div>
                         </div>
                     </div>
@@ -48,7 +45,6 @@
                         <th>Nama Barang</th>
                         <th>Harga Barang</th>
                         <th>Jumlah Barang</th>
-                        <th>Aksi</th>
                     </tr>
                 </thead>
                 <tbody></tbody>
@@ -77,7 +73,7 @@
                     dataType: "json",
                     type: "POST",
                     data: function (d) {
-                        d.filter_barang = $('.filter_barang').val();
+                        d.filter_penjualan = $('.filter_penjualan').val();
                     }
                 },
                 columns: [
@@ -115,13 +111,6 @@
                         className: "", 
                         width: "10%" 
                     },
-                    {
-                        data: "aksi", 
-                        className: "text-center", 
-                        width: "15%", 
-                        orderable: false, 
-                        searchable: false 
-                    }
                 ]
             });
 
@@ -131,7 +120,7 @@
                 }
             });
 
-            $('.filter_barang').change(function () {
+            $('.filter_penjualan').change(function () {
                 tableDetail.draw();
             });
         });

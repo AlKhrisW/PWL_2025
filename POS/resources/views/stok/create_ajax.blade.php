@@ -10,17 +10,6 @@
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <label>Petugas</label>
-                    <select name="user_id" class="form-control" required>
-                        <option value="">- Pilih Petugas -</option>
-                        @foreach($user as $u)
-                            <option value="{{ $u->user_id }}">{{ $u->nama }}</option>
-                        @endforeach
-                    </select>
-                    <small id="error-user_id" class="error-text form-text text-danger"></small>
-                </div>
-
-                <div class="form-group">
                     <label>Supplier</label>
                     <select name="supplier_id" class="form-control" required>
                         <option value="">- Pilih Supplier -</option>
@@ -44,7 +33,7 @@
 
                 <div class="form-group">
                     <label>Tanggal Stok</label>
-                    <input type="date" name="stok_tanggal" class="form-control" required>
+                    <input type="datetime-local"  value="{{ now()->timezone('Asia/Jakarta')->format('Y-m-d\TH:i') }}" name="stok_tanggal" id="stok_tanggal" class="form-control" required>
                     <small id="error-stok_tanggal" class="error-text form-text text-danger"></small>
                 </div>
 
@@ -68,8 +57,7 @@
             rules: {
                 supplier_id: { required: true },
                 barang_id: { required: true },
-                user_id: { required: true },
-                stok_tanggal: { required: true, date: true },
+                stok_tanggal: { required: true},
                 stok_jumlah: { required: true, digits: true }
             },
             submitHandler: function(form) {

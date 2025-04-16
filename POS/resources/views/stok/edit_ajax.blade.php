@@ -31,19 +31,6 @@
 
                 <div class="modal-body">
                     <div class="form-group">
-                        <label>Petugas</label>
-                        <select name="user_id" class="form-control" required>
-                            <option value="">- Pilih Petugas -</option>
-                            @foreach($user as $u)
-                                <option value="{{ $u->user_id }}" {{ $u->user_id == $stok->user_id ? 'selected' : '' }}>
-                                    {{ $u->nama }}
-                                </option>
-                            @endforeach
-                        </select>
-                        <small id="error-user_id" class="error-text form-text text-danger"></small>
-                    </div>
-
-                    <div class="form-group">
                         <label>Supplier</label>
                         <select name="supplier_id" class="form-control" required>
                             <option value="">- Pilih Supplier -</option>
@@ -71,7 +58,7 @@
 
                     <div class="form-group">
                         <label>Tanggal Stok</label>
-                        <input type="date" name="stok_tanggal" id="stok_tanggal" value="{{ \Carbon\Carbon::parse($stok->stok_tanggal)->format('Y-m-d') }}" class="form-control" required>
+                        <input type="datetime-local" name="stok_tanggal" id="stok_tanggal" value="{{ \Carbon\Carbon::parse($stok->stok_tanggal)->format('Y-m-d H:i:s') }}" class="form-control" required>
                         <small id="error-stok_tanggal" class="error-text form-text text-danger"></small>
                     </div>
 
@@ -96,8 +83,7 @@
                 rules: {
                     supplier_id: { required: true },
                     barang_id: { required: true },
-                    user_id: { required: true },
-                    stok_tanggal: { required: true, date: true },
+                    stok_tanggal: { required: true},
                     stok_jumlah: { required: true, digits: true }
                 },
                 submitHandler: function(form) {

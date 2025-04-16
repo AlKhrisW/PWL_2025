@@ -10,28 +10,13 @@
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <label>Kode Penjualan</label>
-                    <input type="text" name="penjualan_kode" class="form-control" required>
-                    <small id="error-penjualan_kode" class="error-text text-danger"></small>
-                </div>
-                <div class="form-group">
-                    <label>Petugas</label>
-                    <select name="user_id" class="form-control" required>
-                        <option value="">- Pilih Petugas -</option>
-                        @foreach($user as $u)
-                            <option value="{{ $u->user_id }}">{{ $u->nama }}</option>
-                        @endforeach
-                    </select>
-                    <small id="error-user_id" class="error-text text-danger"></small>
-                </div>
-                <div class="form-group">
                     <label>Nama Pembeli</label>
                     <input type="text" name="pembeli" class="form-control" required>
                     <small id="error-pembeli" class="error-text text-danger"></small>
                 </div>
                 <div class="form-group">
                     <label>Tanggal Penjualan</label>
-                    <input type="date" name="penjualan_tanggal" class="form-control" required>
+                    <input type="datetime-local"  value="{{ now()->timezone('Asia/Jakarta')->format('Y-m-d\TH:i') }}" name="penjualan_tanggal" id="penjualan_tanggal" class="form-control" required>
                     <small id="error-penjualan_tanggal" class="error-text text-danger"></small>
                 </div>
             </div>
@@ -47,10 +32,8 @@
     $(document).ready(function() {
         $("#form-tambah").validate({
             rules: {
-                penjualan_kode: { required: true, minlength: 3 },
                 pembeli: { required: true, minlength: 3 },
-                penjualan_tanggal: { required: true, date: true },
-                user_id: { required: true }
+                penjualan_tanggal: { required: true}
             },
             submitHandler: function(form) {
                 $.ajax({

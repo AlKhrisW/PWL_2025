@@ -21,27 +21,52 @@
                     <small id="error-penjualan_id" class="error-text text-danger"></small>
                 </div>
 
-                <div class="form-group">
-                    <label>Barang</label>
-                    <select name="barang_id" class="form-control" required>
-                        <option value="">- Pilih Barang -</option>
-                        @foreach($barang as $b)
-                            <option value="{{ $b->barang_id }}">{{ $b->barang_nama }}</option>
-                        @endforeach
-                    </select>
-                    <small id="error-barang_id" class="error-text text-danger"></small>
+                <div id="items-container">
+                    <!-- Item rows will be added here -->
+                    <div class="item-row">
+                        <div class="row">
+                            <div class="col-md-5">
+                                <div class="form-group">
+                                    <label>Barang</label>
+                                    <select name="items[0][barang_id]" class="form-control barang-select" required>
+                                        <option value="">- Pilih Barang -</option>
+                                        @foreach($barang as $b)
+                                            <option value="{{ $b->barang_id }}" data-harga="{{ $b->harga_jual }}">{{ $b->barang_nama }}</option>
+                                        @endforeach
+                                    </select>
+                                    <small class="error-barang_id error-text text-danger"></small>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label>Harga</label>
+                                    <input type="number" name="items[0][harga]" class="form-control harga-input" required>
+                                    <small class="error-harga error-text text-danger"></small>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label>Jumlah</label>
+                                    <input type="number" name="items[0][jumlah]" class="form-control jumlah-input" required>
+                                    <small class="error-jumlah error-text text-danger"></small>
+                                </div>
+                            </div>
+                            <div class="col-md-1">
+                                <div class="form-group">
+                                    <label>&nbsp;</label>
+                                    <button type="button" class="btn btn-danger btn-block remove-item" style="display: none;">
+                                        <i class="fa fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="form-group">
-                    <label>Harga</label>
-                    <input type="number" name="harga" class="form-control" required>
-                    <small id="error-harga" class="error-text text-danger"></small>
-                </div>
-
-                <div class="form-group">
-                    <label>Jumlah</label>
-                    <input type="number" name="jumlah" class="form-control" required>
-                    <small id="error-jumlah" class="error-text text-danger"></small>
+                    <button type="button" id="add-item" class="btn btn-success">
+                        <i class="fa fa-plus"></i> Tambah Barang
+                    </button>
                 </div>
             </div>
 
@@ -55,12 +80,79 @@
 
 <script>
     $(document).ready(function () {
+        let itemIndex = 1;
+
+        // Add new item row
+        $('#add-item').click(function() {
+            const newRow = `
+                <div class="item-row">
+                    <div class="row">
+                        <div class="col-md-5">
+                            <div class="form-group">
+                                <select name="items[${itemIndex}][barang_id]" class="form-control barang-select" required>
+                                    <option value="">- Pilih Barang -</option>
+                                    @foreach($barang as $b)
+                                        <option value="{{ $b->barang_id }}" data-harga="{{ $b->harga_jual }}">{{ $b->barang_nama }}</option>
+                                    @endforeach
+                                </select>
+                                <small class="error-barang_id error-text text-danger"></small>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <input type="number" name="items[${itemIndex}][harga]" class="form-control harga-input" required>
+                                <small class="error-harga error-text text-danger"></small>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <input type="number" name="items[${itemIndex}][jumlah]" class="form-control jumlah-input" required>
+                                <small class="error-jumlah error-text text-danger"></small>
+                            </div>
+                        </div>
+                        <div class="col-md-1">
+                            <div class="form-group">
+                                <button type="button" class="btn btn-danger btn-block remove-item">
+                                    <i class="fa fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            $('#items-container').append(newRow);
+            itemIndex++;
+            
+            // Show remove button on all rows except first
+            $('.remove-item').show();
+        });
+
+        // Remove item row
+        $(document).on('click', '.remove-item', function() {
+            $(this).closest('.item-row').remove();
+            calculateGrandTotal();
+            
+            // Hide remove button if only one row left
+            if ($('.item-row').length === 1) {
+                $('.remove-item').hide();
+            }
+        });
+
+        // Auto-fill price when item selected
+        $(document).on('change', '.barang-select', function() {
+            const selectedOption = $(this).find('option:selected');
+            const price = selectedOption.data('harga');
+            $(this).closest('.row').find('.harga-input').val(price).trigger('change');
+        });
+
+        // Form validation
         $("#form-tambah").validate({
+            ignore: [],
             rules: {
-                barang_id: { required: true },
-                penjualan_id: { required: true },
-                harga: { required: true, digits: true },
-                jumlah: { required: true, digits: true }
+                "penjualan_id": { required: true },
+                "items[0][barang_id]": { required: true },
+                "items[0][harga]": { required: true, digits: true },
+                "items[0][jumlah]": { required: true, digits: true }
             },
             submitHandler: function (form) {
                 $.ajax({
@@ -79,7 +171,14 @@
                         } else {
                             $('.error-text').text('');
                             $.each(response.msgField, function (prefix, val) {
-                                $('#error-' + prefix).text(val[0]);
+                                if (prefix.includes('items.')) {
+                                    const parts = prefix.split('.');
+                                    const index = parts[1];
+                                    const field = parts[2];
+                                    $(`[name="items[${index}][${field}]"]`).next(`.error-${field}`).text(val[0]);
+                                } else {
+                                    $(`#error-${prefix}`).text(val[0]);
+                                }
                             });
                             Swal.fire({
                                 icon: 'error',
@@ -105,3 +204,19 @@
         });
     });
 </script>
+
+<style>
+    .item-row {
+        margin-bottom: 15px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid #eee;
+    }
+    .subtotal {
+        font-weight: bold;
+        background-color: #f8f9fa;
+    }
+    #grand-total {
+        color: #28a745;
+        font-weight: bold;
+    }
+</style>

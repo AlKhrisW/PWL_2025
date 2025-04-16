@@ -86,7 +86,19 @@ class StokController extends Controller
                 ]);
             }
 
-            StokModel::create($request->all());
+            $user = auth()->user();
+
+            $tanggal = \Carbon\Carbon::createFromFormat('Y-m-d\TH:i', $request->penjualan_tanggal)
+                    ->format('Y-m-d H:i:s');
+            
+            StokModel::create([
+                'supplier_id'   => $request->supplier_id,
+                'barang_id'     => $request->barang_id,
+                'user_id'       => $user->user_id,
+                'stok_tanggal'  => $tanggal,
+                'stok_jumlah'   => $request->stok_jumlah,
+                'created_at'    => now(),
+            ]);
 
             return response()->json([
                 'status' => true,
@@ -122,7 +134,6 @@ class StokController extends Controller
             $rules = [
                 'supplier_id'   => 'required|integer',
                 'barang_id'     => 'required|integer',
-                'user_id'       => 'required|integer',
                 'stok_tanggal'  => 'required|date',
                 'stok_jumlah'   => 'required|integer'
 
@@ -213,8 +224,8 @@ class StokController extends Controller
                             'supplier_id'   => $value['A'],
                             'barang_id'     => $value['B'],
                             'user_id'       => $value['C'],
-                            'stok_tanggal'  => $value['D'],
-                            'stok_jumlah'   => $value['E'],
+                            'stok_tanggal'  => now(),
+                            'stok_jumlah'   => $value['D'],
                             'created_at'    => now(),
                         ];
                     }

@@ -120,20 +120,6 @@ Route::middleware('auth')->group(function () {
             Route::get('/export_excel', [StokController::class, 'export_excel']); // export excel
             Route::get('/export_pdf', [StokController::class, 'export_pdf']); // export pdf
         });
-
-        Route::group(['prefix' => 'penjualan'], function () {
-            Route::get('/import', [PenjualanController::class, 'import']); // ajax form upload excel
-            Route::post('/import_ajax', [PenjualanController::class, 'import_ajax']); // ajax import excel
-            Route::get('/export_excel', [PenjualanController::class, 'export_excel']); // export excel
-            Route::get('/export_pdf', [PenjualanController::class, 'export_pdf']); // export pdf
-        });
-    
-        Route::group(['prefix' => 'detailPenjualan'], function () {
-            Route::get('/import', [PenjualanDetailController::class, 'import']); // ajax form upload excel
-            Route::post('/import_ajax', [PenjualanDetailController::class, 'import_ajax']); // ajax import excel
-            Route::get('/export_excel', [PenjualanDetailController::class, 'export_excel']); // export excel
-            Route::get('/export_pdf', [PenjualanDetailController::class, 'export_pdf']); // export pdf
-        });
     });
     
     Route::middleware(['authorize:ADM,MNG'])->group(function(){
@@ -154,27 +140,18 @@ Route::middleware('auth')->group(function () {
         Route::group(['prefix' => 'detailPenjualan'], function () {
             Route::get('/',[PenjualanDetailController::class, 'index']);
             Route::post('/list',[PenjualanDetailController::class, 'list']);
-            Route::get('/{id}/show_ajax',[PenjualanDetailController::class, 'show_ajax']);
         });
     });
 
-    Route::middleware(['authorize:KSR'])->group(function(){
+    Route::middleware(['authorize:MNG,KSR'])->group(function(){
         Route::group(['prefix' => 'penjualan'], function () {
             Route::get('/create_ajax',[PenjualanController::class, 'create_ajax']);
             Route::post('/ajax',[PenjualanController::class, 'store_ajax']);
-            Route::get('/{id}/edit_ajax',[PenjualanController::class, 'edit_ajax']);
-            Route::put('/{id}/update_ajax',[PenjualanController::class, 'update_ajax']);
-            Route::get('/{id}/delete_ajax',[PenjualanController::class, 'confirm_ajax']);
-            Route::delete('/{id}/delete_ajax',[PenjualanController::class, 'delete_ajax']);
         });
 
         Route::group(['prefix' => 'detailPenjualan'], function () {
             Route::get('/create_ajax',[PenjualanDetailController::class, 'create_ajax']);
             Route::post('/ajax',[PenjualanDetailController::class, 'store_ajax']);
-            Route::get('/{id}/edit_ajax',[PenjualanDetailController::class, 'edit_ajax']);
-            Route::put('/{id}/update_ajax',[PenjualanDetailController::class, 'update_ajax']);
-            Route::get('/{id}/delete_ajax',[PenjualanDetailController::class, 'confirm_ajax']);
-            Route::delete('/{id}/delete_ajax',[PenjualanDetailController::class, 'delete_ajax']);
         });
     });
 
