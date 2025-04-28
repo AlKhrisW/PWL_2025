@@ -28,21 +28,6 @@
                     @csrf
 
                     <div class="input-group mb-3">
-                        <select id="level_id" name="level_id" class="form-control" required>
-                            <option value="">Select Level</option>
-                            @foreach ($levels as $level)
-                                <option value="{{ $level->level_id }}">{{ $level->level_nama }}</option>
-                            @endforeach
-                        </select>
-                        <div class="input-group-append">
-                            <div class="input-group-text">
-                                <span class="fas fa-layer-group"></span>
-                            </div>
-                        </div>
-                        <small id="error-level_id" class="error-text text-danger"></small>
-                    </div>
-
-                    <div class="input-group mb-3">
                         <input type="text" id="username" name="username" class="form-control" placeholder="Username"
                             required>
                         <div class="input-group-append">
@@ -139,9 +124,6 @@
                         required: true,
                         equalTo: '#password'
                     },
-                    level_id: {
-                        required: true
-                    }
                 },
                 submitHandler: function(form) {
                     $.ajax({

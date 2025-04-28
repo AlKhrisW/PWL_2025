@@ -49,9 +49,7 @@ class AuthController extends Controller
 
     public function register()
     {
-        $levels = LevelModel::where('level_id', '!=', 1)->select('level_id', 'level_nama')->get();
-
-        return view('auth.register')->with('levels', $levels);
+        return view('auth.register');
     }
 
     public function postRegister(Request $request)
@@ -60,7 +58,7 @@ class AuthController extends Controller
             'username' => 'required|string|unique:m_user,username',
             'nama' => 'required|string|max:255',
             'password' => 'required|string|min:5|confirmed',
-            'level_id' => 'required|exists:m_level,level_id|not_in:1',
+            'level_id' => 'nullable|exists:m_level,level_id',
         ]);
 
         if ($validator->fails()) {
@@ -75,7 +73,7 @@ class AuthController extends Controller
             'username' => $request->username,
             'nama' => $request->nama,
             'password' => bcrypt($request->password),
-            'level_id' => $request->level_id
+            'level_id' => $request->level_id ?? 3
         ]);
 
         return response()->json([
